@@ -8,9 +8,10 @@
 Servo front;  // create servo object to control a servo
 Servo rear;
 
-int del=10;
-int stride= 60;
-int delayBetweenSteps = 500;
+int del=300;
+int stride= 65;
+int delayBetweenSteps = 1000;
+int interStep=25;
 void setup()
 {
   front.attach(3);  // attaches the servo on pin 3 to the servo object
@@ -25,23 +26,33 @@ void loop()
 { 
   forward(10);
   
-  //delay(1000);
+  delay(1000);
   
   //backward(5);
 } 
 
 void forward(int steps){
   for(int i =0;i<steps;i++){
-      front.write(90-stride);
-      delay(del);
-      rear.write(90-stride);
-      delay(del);
-      delay(delayBetweenSteps);
-      front.write(90+stride);
-      delay(del);
+      for(int j=0; j<2*interStep; j++){
+        front.write((90+stride)-(stride*j)/interStep);        
+        delay(10);
+      }
+      for(int j=0; j<2*interStep; j++){
+        rear.write((90+stride)-(stride*j)/interStep);
+        delay(del/interStep);
+      }
+      for(int j=0; j<2*interStep; j++){
+        front.write((90-stride)+(stride*j)/interStep);
+        delay(del/interStep);
+      }
+      for(int j=0; j<2*interStep; j++){
+        rear.write((90-stride)+(stride*j)/interStep);
+        delay(del/interStep);
+      }      
+      /*
       rear.write(90+stride);
       delay(del);
-      delay(delayBetweenSteps);
+      delay(delayBetweenSteps);*/
   }
 }
 
